@@ -1,0 +1,16 @@
+{
+  "displayName": "Codex",
+  "manifest": ".codex-plugin/plugin.json",
+  "manifestSchema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "skillRef": "`${name}`",
+  "agentRef": "the `{name}` custom agent",
+  "agentFormat": "codex-toml",
+  "efforts": ["minimal", "low", "medium", "high", "xhigh"],
+  "manualSkill": { "file": "agents/openai.yaml", "content": "policy:\n  allow_implicit_invocation: false\n" },
+  "text": {
+    "explorer": "the built-in `explorer` agent",
+    "otherCli": "`claude -p \"<prompt>\"`",
+    "transcripts": "`~/.codex/sessions/`, in dated folders of `rollout-*.jsonl` files; match the current session by its first user message and working directory",
+    "instructionsFile": "`AGENTS.md`"
+  }
+}

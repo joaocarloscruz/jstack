@@ -1,0 +1,4 @@
+node_modules/
+.audit/
+decisions.tsv
+.DS_Store

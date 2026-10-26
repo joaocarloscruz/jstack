@@ -1,0 +1,56 @@
+---
+name: reflect
+description: Review this session with three parallel reviewers, find durable lessons, and turn each into a proposed edit to a jstack skill. Use when the user says "reflect" or asks to capture what a session taught.
+---
+
+# Reflect
+
+Mine the current session for lessons that will still matter later, then route each to a skill edit.
+
+Skip it when the session was trivial, off-topic, or fully covered by a skill that was followed correctly. One-offs aren't lessons.
+
+## 1. Find this session's transcript
+
+Transcripts live in `~/.codex/sessions/`, in dated folders of `rollout-*.jsonl` files; match the current session by its first user message and working directory. Look only in this workspace's transcripts, never across other projects, because those are unrelated private conversations. If you can't find the file, write a tight digest of the session instead.
+
+## 2. Spawn three reviewers in parallel
+
+Each reviewer reads the transcript and returns findings. None of them edits anything.
+
+| Lens | Model | Brief |
+|---|---|---|
+| Judgment | the session model at `high` reasoning effort | `references/judgment-reviewer.md` |
+| Tooling | the session model at `medium` reasoning effort | `references/tooling-reviewer.md` |
+| Divergent | the session model at `high` reasoning effort | `references/divergent-reviewer.md` |
+
+Pass each brief as written, with the transcript path or digest filled in.
+
+## 3. Synthesize
+
+Spawn one synthesizer on the session model at `high` reasoning effort with `references/synthesizer.md` and all three reviewers' output. It returns Accepted, Rejected and Backlog lists.
+
+## 4. Prefer structure
+
+Move any Accepted item that a lint, script, hook or check would enforce more reliably to Backlog, per Encode lessons in structure in `$principles`.
+
+## 5. Apply only after approval
+
+Show the full Accepted, Rejected and Backlog output, and wait for the user to approve rows. They may pick a subset or redirect a routing. Skill edits change every future session, so never apply them unasked.
+
+Edit jstack's source, never an installed copy. Skills live in `src/skills/<name>/` in the jstack repo. Rebuild with `node build.mjs` afterward. If you don't know where the jstack repo is, ask.
+
+For each approved row:
+
+- **Small edit** (a bullet, a tightened sentence, a corrected fact): make it directly.
+- **Larger edit** (a new section or more than about 10 lines): draft it, apply `$unslop`, and show the user the diff.
+- **`tune description`** (the skill exists but didn't trigger): rewrite its `description` so it names the words and situations that should have triggered it.
+- **New skill**: use the harness's skill-creator skill if one is installed. Otherwise copy the shape of an existing jstack skill.
+
+Don't commit or push unless the user asks.
+
+## 6. Summarize
+
+- Edits applied: the skill path and one line on what changed.
+- New skills: path and one line.
+- Backlog: one line each, for the user to track.
+- Dropped: one line per rejected finding, with the reason.

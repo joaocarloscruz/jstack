@@ -1,0 +1,14 @@
+{
+  "name": "jstack",
+  "version": "0.1.0",
+  "description": "A personal, harness-agnostic stack of agent skills, subagents and hooks.",
+  "author": {
+    "name": "João Cruz"
+  },
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "verification",
+    "skills"
+  ]
+}

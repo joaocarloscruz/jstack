@@ -1,0 +1,17 @@
+{
+  "displayName": "Claude Code",
+  "manifest": ".claude-plugin/plugin.json",
+  "skillRef": "`/jstack:{name}`",
+  "agentRef": "the `jstack:{name}` subagent",
+  "agentFormat": "claude-md",
+  "readonlyTools": ["Read", "Grep", "Glob", "Bash"],
+  "efforts": ["low", "medium", "high", "xhigh", "max"],
+  "manualSkill": { "frontmatter": "disable-model-invocation: true" },
+  "marketplace": ".claude-plugin/marketplace.json",
+  "text": {
+    "explorer": "the built-in `Explore` subagent",
+    "otherCli": "`codex exec \"<prompt>\"`",
+    "transcripts": "`~/.claude/projects/<workspace>/`, where `<workspace>` is the project path with `:`, `/`, `\\` and `.` replaced by `-`, and the newest `.jsonl` is the current session",
+    "instructionsFile": "`CLAUDE.md`"
+  }
+}
