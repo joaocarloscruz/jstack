@@ -1,7 +1,6 @@
 ---
 name: figure-it-out
-description: Design a custom, auditable playbook when no standard one fits, such as a large migration, an ambitious multi-part change, or work the user reviews after stepping away. Use when the user invokes figure-it-out or says "figure it out".
-disable-model-invocation: true
+description: Design a custom, auditable playbook when no standard one fits, such as a large migration, an ambitious multi-part change, or work the user reviews after stepping away. Use when lead routes a task here, or when the user says "figure it out".
 ---
 
 # Figure it out

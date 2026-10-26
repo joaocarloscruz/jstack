@@ -1,13 +1,13 @@
 ---
 name: figure-it-out
-description: Design a custom, auditable playbook when no standard one fits, such as a large migration, an ambitious multi-part change, or work the user reviews after stepping away. Use when the user invokes figure-it-out or says "figure it out".
+description: Design a custom, auditable playbook when no standard one fits, such as a large migration, an ambitious multi-part change, or work the user reviews after stepping away. Use when lead routes a task here, or when the user says "figure it out".
 ---
 
 # Figure it out
 
 When no playbook fits the task, design one. Before any code, the deliverable is the workflow itself: phases that match the rigor to the stakes, test each step like an experiment, and leave a decision trail the user can audit later.
 
-Start the task list with "Read `$principles`", then the phases below.
+Start the task list with "Read `$jstack:principles`", then the phases below.
 
 ## Phase A: Frame
 
@@ -24,7 +24,7 @@ Present the framing and tradeoffs before a long run. Reversible work proceeds wi
 Split the work into small units that can each land on their own. Put the riskiest unknown first. Build the scaffold and the verification before the features.
 
 - Build the verification harness before the work, with a baseline captured from the current state, so every check reads "old value vs new value".
-- For one-way design decisions, run `$architect`. Skip it for mechanical work whose shape is already clear.
+- For one-way design decisions, run `$jstack:architect`. Skip it for mechanical work whose shape is already clear.
 - Decide what runs in parallel. Split only along real seams, and give each worker its own worktree or branch. Don't over-split.
 - Write the phase list down. That list is what the user reviews.
 
@@ -35,12 +35,12 @@ Then add the designed steps to the task list and run each one under Phase C, log
 Each unit is an experiment. State the hypothesis, make the smallest change, measure against the predicate on the real artifact, and keep it only if it moved the predicate. Otherwise revert it. Verify each unit before starting the next.
 
 - Verify by inspecting the artifact, never a self-report. When something passes too easily, suspect the check.
-- Pair delegated work with a judge (the `reviewer` custom agent). If a worker games the gate, reset and tighten the contract. If the gate itself is wrong, fix it in its own change.
+- Pair delegated work with a judge (the `jstack_reviewer` custom agent). If a worker games the gate, reset and tighten the contract. If the gate itself is wrong, fix it in its own change.
 - A verdict is VERIFIED, NOT VERIFIED or INCONCLUSIVE. Inconclusive is not a pass. Don't hide a negative result.
 
 ## Phase D: Keep the audit trail
 
-Log the run with `$show-me-your-work`. This work is usually big enough to commit the log so the reviewer can read it with the PR.
+Log the run with `$jstack:show-me-your-work`. This work is usually big enough to commit the log so the reviewer can read it with the PR.
 
 ## Phase E: Verify and hand back
 

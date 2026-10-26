@@ -48,7 +48,7 @@ A category with no connected tool is a gap, not a choice. Record it as one. Skip
 
 ## 4. Synthesize
 
-Spawn one synthesizer on `opus` at `xhigh` effort with every investigator's findings (including empty results and skips), the anchor, the question, `references/epistemics.md` and `references/synthesizer-prompt.md`.
+Spawn one synthesizer on `opus` at `medium` effort with every investigator's findings (including empty results and skips), the anchor, the question, `references/epistemics.md` and `references/synthesizer-prompt.md`.
 
 ## 5. Present
 

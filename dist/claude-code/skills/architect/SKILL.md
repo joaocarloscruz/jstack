@@ -17,7 +17,7 @@ Skip this phase only for greenfield work with nothing around it.
 
 ## Phase B: Sketch
 
-Design it at least twice. Spawn two or more runners in parallel, each with `references/runner-prompt.md`, the task and the Phase A findings. Give each runner its own folder or worktree so they can't see each other. Run them on different models when you can: one on `opus` at `xhigh` effort and one on `sonnet` at `high` effort. For a third, different model family, run one through `codex exec "<prompt>"` if it's installed.
+Design it at least twice. Spawn two or more runners in parallel, each with `references/runner-prompt.md`, `references/rationale-template.md`, the task and the Phase A findings. Give each runner its own folder or worktree so they can't see each other. Run them on different models when you can: one on `opus` at `medium` effort and one on `sonnet` at `high` effort. For a third, different model family, if it's installed, run one through the `codex` CLI, with the brief written to a file and piped in on stdin (`codex exec --sandbox read-only - < brief.md`), never pasted as a command-line argument. That sends the brief, code included, to another vendor, so skip it if the user wants their code kept with one vendor. If two runners end up on the same model, say so: their agreement means less.
 
 Require structurally different candidates, whole-shape alternatives rather than tweaks of one shape.
 
@@ -27,7 +27,9 @@ Compare the viable candidates on interface depth: prefer the one that hides more
 
 ## Phase C: Agree (opt-in)
 
-By default, go straight to implementation. Pause for sign-off only when the user asked for a checkpoint ("stop and show me before implementing").
+When a playbook (Feature, Bug fix, Refactoring, or figure-it-out) called this skill, stop here and hand the sketch and rationale back. The playbook owns implementation, delegation and verification.
+
+When the user called it directly, go straight to implementation by default. Pause for sign-off only when they asked for a checkpoint ("stop and show me before implementing").
 
 The sketch can land as its own commit either way. For adversarial pressure before implementing, run `/jstack:interrogate` on it.
 

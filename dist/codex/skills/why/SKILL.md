@@ -5,7 +5,7 @@ description: Find out why code is the way it is. Use for "why does X work this w
 
 # Why
 
-Find the forces that shaped a piece of code. `$how` answers what code does. This skill answers why it exists in this shape.
+Find the forces that shaped a piece of code. `$jstack:how` answers what code does. This skill answers why it exists in this shape.
 
 Work as a careful, precise investigator. Keep what you know apart from what you infer. `references/epistemics.md` has the confidence tiers and phrasing, and the synthesizer must follow it.
 

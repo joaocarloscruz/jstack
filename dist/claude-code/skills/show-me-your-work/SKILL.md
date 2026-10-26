@@ -47,7 +47,7 @@ When you add to a log another session started, make your first row `phase` = `st
 
 ## Where it lives
 
-By default the log is a working file, not committed: `decisions.tsv` in the work folder, or `.audit/<task>.tsv` when several efforts run at once. Commit it only when a reviewer needs the trail to trust the result.
+By default the log is a working file, not committed: `decisions.tsv` in the work folder, or `.audit/<task>.tsv` when several efforts run at once. In a git repo, add its path to `.git/info/exclude` when you create it, so a later commit can't sweep it in. Commit it only when a reviewer needs the trail to trust the result.
 
 ## Rules
 
@@ -56,7 +56,7 @@ By default the log is a working file, not committed: `decisions.tsv` in the work
 
 ## Audit before handing back
 
-Check the log against what actually happened. This session's transcript is in `~/.claude/projects/<workspace>/`, where `<workspace>` is the project path with `:`, `/`, `\` and `.` replaced by `-`, and the newest `.jsonl` is the current session. Read only this workspace's.
+Check the log against what actually happened. This session's transcript is in `~/.claude/projects/<workspace>/`, where `<workspace>` is the project's absolute path with every character that isn't a letter or digit replaced by `-` (very long paths are shortened, so match the folder by prefix). Several sessions can share the folder, so open the newest few `.jsonl` files and pick the one whose first user message matches this session. Read only this workspace's.
 
 - Every row maps to a real decision or action.
 - Every evidence pointer resolves and shows what the row claims.
@@ -66,6 +66,6 @@ Fix the log by adding rows, never by editing them.
 
 ## Second-model review
 
-Before handing back, have a different model read the log and the transcript and flag what the user should look at: decisions with weak evidence, verification claimed without proof, risky calls, and gaps a quick skim would miss. Use `codex exec "<prompt>"` if it's installed, or a subagent on a different role than the one that did the work. Self-review doesn't count.
+Before handing back, have a different model read the log and the transcript and flag what the user should look at: decisions with weak evidence, verification claimed without proof, risky calls, and gaps a quick skim would miss. If it's installed and the user is fine with the transcript going to another vendor, use the `codex` CLI, with the brief written to a file and piped in on stdin (`codex exec --sandbox read-only - < brief.md`), never pasted as a command-line argument. Otherwise use a subagent on a role whose model differs from the one that did the work. Self-review doesn't count. If no different model is available, say so instead of claiming a second-model review.
 
-End the reply with an **Attention** section. First line: `reviewed by <model>`. Then each flag, pointing at specific rows. "No flags" is a valid answer.
+End the reply with an **Attention** section. First line: `reviewed by <model>`, or `not reviewed by a second model: <reason>`. Then each flag, pointing at specific rows. "No flags" is a valid answer.

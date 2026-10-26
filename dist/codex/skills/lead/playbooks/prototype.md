@@ -9,6 +9,6 @@ This is the one playbook where speed beats polish. Code quality doesn't matter a
 3. **Build throwaway code in a scratch folder**, apart from production source. For a visual decision, use plain HTML, CSS and JS or the lightest stack that shows the idea. For a behavioral or timing question, write the smallest script that exercises it. No framework, tests or abstractions.
 4. **Put alternatives behind one switch** (buttons or a key press), each variant labeled.
 5. **Observe the result.** For a visual decision, screenshot each variant and click through it with a browser tool. For a behavioral question, log the timing, print the output, or watch it run. The observation is the test.
-6. **Recommend.** Present the alternatives, the tradeoffs and your pick. Hand the chosen direction to Feature, or to `$architect` for its shape.
+6. **Recommend.** Present the alternatives, the tradeoffs and your pick. Hand the chosen direction to Feature, or to `$jstack:architect` for its shape.
 
 **Reply:** the variants, the evidence (screenshots, output or timings), the tradeoffs, your recommendation and the scratch path. Say plainly that the prototype is throwaway.

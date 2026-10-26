@@ -2,9 +2,9 @@
 
 **You own the answer.** The deliverable is a cited explanation or a recommendation, not a code change.
 
-1. Run `$how` over the subsystem. For questions about motivation or history, also run `$why`.
+1. Run `$jstack:how` over the subsystem. For questions about motivation or history, also run `$jstack:why`.
 2. Write the answer in the shape `how` produces (Overview, Key concepts, How it works, Where things live, Gotchas). For a choice between options, write a recommendation with a tradeoffs table instead.
-3. Apply `$unslop` to the reply.
+3. Apply `$jstack:unslop` to the reply.
 
 No code changes and no PR. If the answer leads to a change, say so and switch to the Bug fix or Feature playbook.
 

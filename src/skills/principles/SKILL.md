@@ -49,7 +49,7 @@ Each principle starts with when it applies. Cite one in a reply only when it cha
 
 **Fix root causes.** Debugging. Reproduce first. Ask "why" until the answer is a wrong decision in the code, not a consequence of one. If the state that triggered the symptom is legitimate, handle it where it broke. If it should never exist, find what produced it, because a guard there hides the bug. Fix every instance of the pattern. A workaround that needs a paragraph of comment means the code is wrong.
 
-**Sequence verifiable units.** Multi-step work, and how you order commits and PRs. Break the work into small units that each end in a state you can check, and don't start the next until the current one passes. Order the delivery so it proves itself: the failing test, then the fix.
+**Sequence verifiable units.** Multi-step work, and how you order commits and PRs. Break the work into small units that each end in a state you can check, and don't start the next until the current one passes. Order the delivery so it proves itself: the failing test, then the fix. That failing-test commit is the only one allowed to fail on its own.
 
 **Test behavior, not implementation.** Writing, changing or keeping a test. Imagine two edits. Break the behavior: the test must fail. Restructure the internals without changing results: the test must still pass. Keep tests that do both. Derive expected values from the requirement, not from running the code.
 

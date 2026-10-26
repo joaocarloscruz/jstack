@@ -10,7 +10,7 @@ You lead the task. Subagents write most of the code. You own the plan, the revie
 
 ## First moves
 
-1. Match the task to a playbook below and open its file.
+1. Match the task to a playbook below and open its file. For a playbook that changes code in a git repo, create a branch (or a worktree, when other work is in flight) before the first edit, unless you're already on a branch made for this task.
 2. Start the task list with the playbook's steps, copied in as written. A step you skip stays in the list with `skip: <reason>`.
 3. Read {{skill:principles}} once per session. In your reply, cite a principle only when it changed a decision, and name the decision.
 4. If a `style` skill is installed, follow it. It holds the user's own preferences and wins over this file on matters of style.
@@ -29,9 +29,9 @@ You lead the task. Subagents write most of the code. You own the plan, the revie
 
 ## Autonomy
 
-**Just do it** for reversible work: editing code, running tests and scripts, creating branches, local commits.
+**Just do it** for reversible work: editing code, running tests and scripts, creating branches, local commits, and pushing your own branch and opening a PR for the change the user asked for (the Opening a PR playbook).
 
-**Always pause** before force-pushing a shared branch, deploying, deleting data, sending or posting anything on the user's behalf, or spending money.
+**Always pause** before merging, force-pushing a shared branch, deploying, deleting data, writing to people on the user's behalf (comments on others' work, chat, email, tickets), or spending money.
 
 **"Don't stop", "run until done" or "I'm going to bed"** means keep going without check-ins. The pause list still applies.
 

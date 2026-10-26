@@ -1,6 +1,43 @@
 # jstack
 
-A personal stack of agent skills, subagents and hooks, adapted from [pstack](https://github.com/cursor/plugins/tree/main/pstack). You write it once in `src/`, and `build.mjs` turns it into a plugin for each harness in `dist/`: Claude Code and Codex today. T3 Code runs those CLIs, so it picks jstack up through them.
+A personal stack of agent skills, a reviewer agent and a safety hook, adapted from [pstack](https://github.com/cursor/plugins/tree/main/pstack). You write it once in `src/`, and `build.mjs` turns it into a plugin for each harness: Claude Code and Codex. T3 Code runs those CLIs, so it picks jstack up through them.
+
+## Install
+
+The repo root is a marketplace for both harnesses.
+
+**Claude Code**
+
+```bash
+claude plugin marketplace add joaocarloscruz/jstack
+```
+
+```bash
+claude plugin install jstack@jstack
+```
+
+**Codex**
+
+```bash
+codex plugin marketplace add joaocarloscruz/jstack
+```
+
+```bash
+codex plugin add jstack@jstack
+```
+
+Codex plugins can't ship custom agents, so copy `dist/codex/agents/jstack_reviewer.toml` into `~/.codex/agents/`. Codex also runs a plugin's hooks only after you approve them, so open Codex and approve the jstack hook in `/hooks`.
+
+To install from a local clone instead, pass the clone's path to `marketplace add`.
+
+## Updating
+
+Both harnesses cache an installed plugin by its version, so a change reaches your sessions only after a version bump and an update:
+
+1. Bump `version` in `jstack.json` and run `node build.mjs`.
+2. Commit and push.
+3. Update the plugin: `claude plugin update jstack@jstack` in Claude Code, and run `codex plugin add jstack@jstack` again in Codex.
+4. Start a new session.
 
 ## Skills
 
@@ -8,7 +45,7 @@ Start with `lead`. It picks a playbook and calls the other skills as the work ne
 
 | Skill | What it does |
 |---|---|
-| `lead` | The router. Matches the task to a playbook (Investigation, Bug fix, Feature, Refactoring, Prototype, Opening a PR), delegates code, and verifies before reporting. Manual only. |
+| `lead` | The router. Matches the task to a playbook (Investigation, Bug fix, Feature, Refactoring, Prototype, Opening a PR), delegates code, and verifies before reporting. You start it yourself. |
 | `principles` | The engineering principles every playbook cites, in one file. |
 | `prove` | Verify against the real artifact before saying done. |
 | `how` | Explain how code works, with parallel explorers for big questions. |
@@ -18,24 +55,35 @@ Start with `lead`. It picks a playbook and calls the other skills as the work ne
 | `tdd` | Failing regression test first, when it's cheap. |
 | `unslop` | Remove AI writing patterns. |
 | `show-me-your-work` | A decision log for long or unattended runs. |
-| `figure-it-out` | Design a custom playbook when none fits. Manual only. |
-| `reflect` | Turn a session's lessons into proposed skill edits. Manual only. |
-| `correct` | Make a repeated agent mistake impossible in the repo. Manual only. |
-| `automate-me` | Mine your transcripts into a `style` skill that `lead` follows. Manual only. |
+| `figure-it-out` | Design a custom playbook when none fits. `lead` routes large work here. |
+| `reflect` | Turn a session's lessons into proposed skill edits. You start it yourself. |
+| `correct` | Make a repeated agent mistake impossible in the repo. You start it yourself. |
+| `automate-me` | Mine your transcripts into a `style` skill that `lead` follows. You start it yourself. |
 
-Agent: `reviewer`, a skeptical read-only reviewer. Hook: `guard-shell`, which blocks `--no-verify`, force-push and `rm -rf` on `/` or home.
+"You start it yourself" means the skill is manual: agents can't trigger it on their own. Type `/jstack:lead` in Claude Code or `$jstack:lead` in Codex.
+
+**Agent:** `reviewer`, a skeptical reviewer told not to edit files. In Claude Code it gets only read and shell tools, but a shell can still write, so in both harnesses read-only rests on its instructions.
+
+**Hook:** `guard-shell` runs before every Bash or PowerShell command. It parses the command into simple commands and words first, so text that only mentions a flag (a commit message, an `echo`, a heredoc) never counts. It blocks:
+
+- skipping git hooks: `--no-verify` on any git command, and `-n` on `git commit`
+- force-pushing: `--force`, `-f` in any short-flag cluster, or a `+refspec`. `--force-with-lease` is allowed.
+- recursive deletes of `/`, `~`, `$HOME`, `$env:USERPROFILE` or a drive root, through `rm` or `Remove-Item`
+
+It also looks inside `bash -c`, `sh -c` and `pwsh -Command`. It's a guardrail against slips, not a sandbox. A determined command (a script file, an alias) can get past it.
 
 ## Layout
 
 | Path | What it holds |
 |---|---|
 | `jstack.json` | Plugin name, version and description, shared by every harness. |
-| `roles.json` | Model roles (`judge`, `coder`, `fast`) and the model and effort each harness uses. |
-| `harness/<id>.json` | What differs per harness: manifest path, skill and agent naming, agent format, valid efforts, how to mark a skill manual, and named text snippets. |
+| `roles.json` | Model roles (`judge`, `coder`, `fast`), each with a purpose and the model and effort each harness uses. |
+| `harness/<id>.json` | What differs per harness: manifest path, skill and agent naming, agent format, valid efforts, how to mark a skill manual, and named text snippets. Each file here is one harness. |
 | `src/skills/<name>/` | Skills in neutral terms. The frontmatter `name` must match the folder. |
-| `src/agents/<name>.md` | Subagents with `name`, `description`, `role` and an optional `readonly: true`. |
-| `src/hooks/` | `hooks.json` and its scripts. Both harnesses accept the same format. |
+| `src/agents/<name>.md` | Agents with `name`, `description`, `role` and an optional `readonly: true`. |
+| `src/hooks/` | `hooks.json`, the hook script and its rules. Both harnesses accept the same format. |
 | `dist/` | Generated output. Don't edit it. |
+| `test/` | Tests for the hook, the log script and the build. |
 
 ## Writing neutral skills
 
@@ -43,63 +91,53 @@ Write "spawn a subagent", "ask the user" and "the task list", never a harness's 
 
 | Token | Claude Code | Codex |
 |---|---|---|
-| `{{skill:prove}}` | `` `/jstack:prove` `` | `` `$prove` `` |
-| `{{agent:reviewer}}` | the `jstack:reviewer` subagent | the `reviewer` custom agent |
-| `{{role:judge}}` | `opus` at `xhigh` effort | the session model at `high` reasoning effort |
+| `{{skill:prove}}` | `` `/jstack:prove` `` | `` `$jstack:prove` `` |
+| `{{agent:reviewer}}` | the `jstack:reviewer` subagent | the `jstack_reviewer` custom agent |
+| `{{role:judge}}` | `opus` at `medium` effort | the session model at `high` reasoning effort |
 | `{{harness:explorer}}` | the built-in `Explore` subagent | the built-in `explorer` agent |
-| `{{harness:otherCli}}` | `codex exec "<prompt>"` | `claude -p "<prompt>"` |
+| `{{harness:otherCli}}` | the `codex` CLI, brief piped in on stdin | the `claude` CLI, brief piped in on stdin |
 | `{{harness:transcripts}}` | `~/.claude/projects/<workspace>/` | `~/.codex/sessions/` |
 | `{{harness:instructionsFile}}` | `CLAUDE.md` | `AGENTS.md` |
 
-`{{harness:<key>}}` reads `text.<key>` from the harness profile, so adding a key there adds a token.
+`{{harness:<key>}}` reads `text.<key>` from the harness profile, so adding a key there adds a token. Cite a principle as "<Principle name> in `{{skill:principles}}`", using its exact name.
 
-Add `invocation: manual` to a skill's frontmatter to stop the model from triggering it on its own. The build turns it into `disable-model-invocation: true` for Claude Code and an `agents/openai.yaml` policy for Codex.
+Add `invocation: manual` to a skill's frontmatter to keep agents from triggering it on their own. The build turns it into `disable-model-invocation: true` for Claude Code and an `agents/openai.yaml` policy for Codex.
 
-## Build
+## Build and test
 
 ```bash
 node build.mjs
 ```
 
 ```bash
-node build.mjs --check
+npm run check
+```
+
+```bash
+npm test
 ```
 
 The build fails when:
 
-- a token names a missing skill, agent, role or harness text key
+- a token names a missing skill, agent, role or harness text key, or is malformed
 - a role's effort isn't valid for a harness
 - a skill's `name` doesn't match its folder, or it has no `description`
 - a backticked file reference (`references/x.md`) doesn't exist in the skill
-- source text uses a pstack or Cursor name, a hard-coded model, a harness tool name or a harness path
+- a principle citation names no principle
+- source text uses a pstack or Cursor name, a model name, a harness name, tool name or path, or an already-rendered skill name
 
-`--check` also fails when `dist/` doesn't match `src/`. Run it in CI.
-
-## Install
-
-**Claude Code.** The repo root is a marketplace. Add it from GitHub as `<owner>/jstack`, or from a local clone with its path:
-
-```bash
-claude plugin marketplace add <owner>/jstack
-```
-
-```bash
-claude plugin install jstack@jstack
-```
-
-**Codex.** Copy `dist/codex` to `~/.codex/plugins/jstack`, add it to `~/.agents/plugins/marketplace.json`, and restart. Then review and trust the hook with `/hooks`. Codex plugins can't ship custom agents, so copy `dist/codex/agents/*.toml` into `~/.codex/agents/`.
+`npm run check` also fails when `dist/` or the marketplace files don't match `src/`. CI runs the check and the tests on Ubuntu and Windows.
 
 ## Differences between harnesses
 
-- **Read-only agents.** Claude Code enforces read-only with a `tools:` list. A Codex custom agent can't override the sandbox, so its instructions are all that keeps it read-only.
-- **Models.** Codex roles set `model: null`, which keeps the session model and varies only the effort. Put a model name in `roles.json` to pin one, which also gives `interrogate` and `architect` real model diversity on Codex.
-- **Hooks.** Both harnesses send the same JSON on stdin and treat exit code 2 as a block. Codex also sets `CLAUDE_PLUGIN_ROOT`, so one `hooks.json` serves both.
+- **Skill and agent names.** Both harnesses prefix plugin skills with `jstack:`. Codex agent names are global, so the build names the agent `jstack_reviewer` there.
+- **Models.** Codex roles set `model: null`, which keeps the session model and varies only the effort. On Codex, `interrogate` and `architect` say so when two reviewers share a model. Put a model name in `roles.json` to pin one.
+- **Hooks.** Both harnesses send the same JSON on stdin and treat exit code 2 as a block. Codex sets `CLAUDE_PLUGIN_ROOT` for compatibility, so one `hooks.json` serves both.
 
-## Not yet verified
+## Known gaps
 
-- `claude plugin validate` passes on `dist/claude-code` and `dist/`, but neither plugin has run in a real session.
-- Whether Codex calls plugin skills as `$prove` or `$jstack:prove`. Change `skillRef` in `harness/codex.json` if needed.
-- The Codex transcript location and the marketplace entry's `policy` and `category` fields.
+- The hook hasn't run inside Codex yet, because Codex needs the one-time `/hooks` approval first. Its behavior is covered by the tests, but the `CLAUDE_PLUGIN_ROOT` path on Codex is unconfirmed until then.
+- No end-to-end `lead` run has completed in either harness yet.
 
 ## Credits
 

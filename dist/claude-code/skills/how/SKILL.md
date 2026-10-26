@@ -7,7 +7,7 @@ description: Explain how code works. Use for "how does X work", walkthroughs bef
 
 Answer "how does X work?" at the level a senior engineer needs to start working in the area: a working mental model, not annotated source.
 
-Every subagent here is read-only, so use the built-in `Explore` subagent and tell it not to edit files. Explorers run on `haiku` at `low` effort. The explainer runs on `opus` at `xhigh` effort.
+Every subagent here is read-only, so use the built-in `Explore` subagent and tell it not to edit files. Explorers run on `haiku` at `low` effort. The explainer runs on `opus` at `medium` effort.
 
 ## 1. Size the question
 

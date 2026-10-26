@@ -1,7 +1,7 @@
 {
   "judge": {
     "purpose": "Design calls, reviews and prose. The strongest reasoning available.",
-    "claude-code": { "model": "opus", "effort": "xhigh" },
+    "claude-code": { "model": "opus", "effort": "medium" },
     "codex": { "model": null, "effort": "high" }
   },
   "coder": {

@@ -1,10 +1,10 @@
 # Opening a PR
 
-The last step of every playbook that changes code.
+The last step of every playbook that changes code. If the repo has no remote, or the user said not to open PRs, stop after the commits and say so.
 
-**Branch.** Work on a branch, or a git worktree off the default branch when other work is in flight. Parallel subagents writing to the same repo each get their own worktree. If the branch already has unrelated changes, move them out of the way first.
+**Branch.** You should already be on the branch or worktree `lead` had you create before the first edit. Parallel subagents writing to the same repo each get their own worktree. If the branch has unrelated changes, move them out of the way first.
 
-**Commits.** Commit often while working. Before opening the PR, rebase into small, ordered commits that each build and pass on their own and tell the story in order. Amend when a fix belongs in the commit you just made. Commit bodies don't repeat the subject.
+**Commits.** Commit often while working. Before opening the PR, rebase into small, ordered commits that each build and pass on their own and tell the story in order. The one exception is a failing regression test, which lands in its own commit directly before the fix that makes it pass. Amend when a fix belongs in the commit you just made. Commit bodies don't repeat the subject.
 
 **Clean the diff.** Before committing, remove dead code, debug output and comments that narrate what the code does. Keep comments that explain a non-obvious why. Apply {{skill:unslop}} to the title, description and commit messages.
 
@@ -21,7 +21,7 @@ The last step of every playbook that changes code.
 
 Attach screenshots or recordings when they prove a claim. Long logs and checklists go in a linked file, not the body.
 
-**Tooling.** If the harness has its own PR tool, use it. Otherwise use `gh pr create`. Open the PR as ready for review, not as a draft. Check `gh pr view <number>` before you describe its status.
+**Tooling.** Push your branch. If the harness has its own PR tool, use it. Otherwise use `gh pr create`. Open the PR as ready for review, not as a draft. Check `gh pr view <number>` before you describe its status.
 
 **Size.** Prefer several narrow PRs to one large one. For a stack, each child PR targets its parent's branch.
 

@@ -31,7 +31,7 @@ ts	phase	decision	why	evidence	result
 
 ## Logging a row
 
-Write each row the way you'd tell a teammate what you did. Plain words, no jargon. `$unslop` applies.
+Write each row the way you'd tell a teammate what you did. Plain words, no jargon. `$jstack:unslop` applies.
 
 Use the script in this skill's folder:
 
@@ -47,7 +47,7 @@ When you add to a log another session started, make your first row `phase` = `st
 
 ## Where it lives
 
-By default the log is a working file, not committed: `decisions.tsv` in the work folder, or `.audit/<task>.tsv` when several efforts run at once. Commit it only when a reviewer needs the trail to trust the result.
+By default the log is a working file, not committed: `decisions.tsv` in the work folder, or `.audit/<task>.tsv` when several efforts run at once. In a git repo, add its path to `.git/info/exclude` when you create it, so a later commit can't sweep it in. Commit it only when a reviewer needs the trail to trust the result.
 
 ## Rules
 
@@ -56,7 +56,7 @@ By default the log is a working file, not committed: `decisions.tsv` in the work
 
 ## Audit before handing back
 
-Check the log against what actually happened. This session's transcript is in `~/.codex/sessions/`, in dated folders of `rollout-*.jsonl` files; match the current session by its first user message and working directory. Read only this workspace's.
+Check the log against what actually happened. This session's transcript is in `~/.codex/sessions/`, in dated folders of `rollout-*.jsonl` files. Several sessions can run at once, so pick the file whose working directory and first user message match this session. Read only this workspace's.
 
 - Every row maps to a real decision or action.
 - Every evidence pointer resolves and shows what the row claims.
@@ -66,6 +66,6 @@ Fix the log by adding rows, never by editing them.
 
 ## Second-model review
 
-Before handing back, have a different model read the log and the transcript and flag what the user should look at: decisions with weak evidence, verification claimed without proof, risky calls, and gaps a quick skim would miss. Use `claude -p "<prompt>"` if it's installed, or a subagent on a different role than the one that did the work. Self-review doesn't count.
+Before handing back, have a different model read the log and the transcript and flag what the user should look at: decisions with weak evidence, verification claimed without proof, risky calls, and gaps a quick skim would miss. If it's installed and the user is fine with the transcript going to another vendor, use the `claude` CLI, with the brief written to a file and piped in on stdin (`claude -p < brief.md`), never pasted as a command-line argument. Otherwise use a subagent on a role whose model differs from the one that did the work. Self-review doesn't count. If no different model is available, say so instead of claiming a second-model review.
 
-End the reply with an **Attention** section. First line: `reviewed by <model>`. Then each flag, pointing at specific rows. "No flags" is a valid answer.
+End the reply with an **Attention** section. First line: `reviewed by <model>`, or `not reviewed by a second model: <reason>`. Then each flag, pointing at specific rows. "No flags" is a valid answer.

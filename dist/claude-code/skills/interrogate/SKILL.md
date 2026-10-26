@@ -25,9 +25,11 @@ Write the intent in one paragraph, from the user's message, commit messages, any
 
 Spawn all reviewers at once, as read-only subagents (the `jstack:reviewer` subagent works), each on a different model:
 
-- **Reviewer A** on `opus` at `xhigh` effort.
+- **Reviewer A** on `opus` at `medium` effort.
 - **Reviewer B** on `sonnet` at `high` effort.
-- **Reviewer C**, a different model family, through `codex exec "<prompt>"` if it's installed. Give it the same prompt and tell it not to edit files. Skip it and say so if the CLI isn't available.
+- **Reviewer C**, a different model family, if it's installed: run it through the `codex` CLI, with the brief written to a file and piped in on stdin (`codex exec --sandbox read-only - < brief.md`), never pasted as a command-line argument. Give it the same brief and tell it not to edit files. This sends the diff to another vendor, so skip it if the user wants their code kept with one vendor. Skip it and say so if the CLI isn't available.
+
+If two reviewers end up on the same model, say so in the Reviewers list. Agreement between them is a weaker signal than agreement across models.
 
 Every reviewer gets the same brief: `references/reviewer-prompt.md` filled in with the intent, the diff, `references/rubric.md` and `references/code-quality.md`.
 

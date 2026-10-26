@@ -12,7 +12,7 @@ Skip it when the session was trivial, off-topic, or fully covered by a skill tha
 
 ## 1. Find this session's transcript
 
-Transcripts live in `~/.claude/projects/<workspace>/`, where `<workspace>` is the project path with `:`, `/`, `\` and `.` replaced by `-`, and the newest `.jsonl` is the current session. Look only in this workspace's transcripts, never across other projects, because those are unrelated private conversations. If you can't find the file, write a tight digest of the session instead.
+Transcripts live in `~/.claude/projects/<workspace>/`, where `<workspace>` is the project's absolute path with every character that isn't a letter or digit replaced by `-` (very long paths are shortened, so match the folder by prefix). Several sessions can share the folder, so open the newest few `.jsonl` files and pick the one whose first user message matches this session. Look only at this workspace's transcripts, never other projects', because those are unrelated private conversations. If you can't find the file, write a tight digest of the session instead.
 
 ## 2. Spawn three reviewers in parallel
 
@@ -20,15 +20,15 @@ Each reviewer reads the transcript and returns findings. None of them edits anyt
 
 | Lens | Model | Brief |
 |---|---|---|
-| Judgment | `opus` at `xhigh` effort | `references/judgment-reviewer.md` |
+| Judgment | `opus` at `medium` effort | `references/judgment-reviewer.md` |
 | Tooling | `sonnet` at `high` effort | `references/tooling-reviewer.md` |
-| Divergent | `opus` at `xhigh` effort | `references/divergent-reviewer.md` |
+| Divergent | `opus` at `medium` effort | `references/divergent-reviewer.md` |
 
 Pass each brief as written, with the transcript path or digest filled in.
 
 ## 3. Synthesize
 
-Spawn one synthesizer on `opus` at `xhigh` effort with `references/synthesizer.md` and all three reviewers' output. It returns Accepted, Rejected and Backlog lists.
+Spawn one synthesizer on `opus` at `medium` effort with `references/synthesizer.md` and all three reviewers' output. It returns Accepted, Rejected and Backlog lists.
 
 ## 4. Prefer structure
 
@@ -38,7 +38,7 @@ Move any Accepted item that a lint, script, hook or check would enforce more rel
 
 Show the full Accepted, Rejected and Backlog output, and wait for the user to approve rows. They may pick a subset or redirect a routing. Skill edits change every future session, so never apply them unasked.
 
-Edit jstack's source, never an installed copy. Skills live in `src/skills/<name>/` in the jstack repo. Rebuild with `node build.mjs` afterward. If you don't know where the jstack repo is, ask.
+Edit jstack's source, never an installed copy. Skills live in `src/skills/<name>/` in the jstack repo. Afterward, rebuild with `node build.mjs` and bump `version` in `jstack.json`. The edits reach sessions only after the user updates the installed plugin (the README's Updating section). If you don't know where the jstack repo is, ask.
 
 For each approved row:
 

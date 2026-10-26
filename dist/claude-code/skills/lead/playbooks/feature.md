@@ -7,7 +7,7 @@
 3. **Plan the parallelism** as four task-list items. An item that doesn't apply stays with `n/a: <reason>`.
    - **Blocking first steps.** What must land before anything can run in parallel.
    - **Independent workstreams.** Work on separate files or layers can run in parallel. Shared writes run in order.
-   - **Shared mutable state.** Split the target first, per Separate before serializing in `/jstack:principles`. Serialize only for a real invariant.
+   - **Shared mutable state.** Split the target first, per Separate before serializing shared state in `/jstack:principles`. Serialize only for a real invariant.
    - **Smallest safe split.** If one worker is best, say why.
 4. **Delegate the code** to a subagent on `sonnet` at `high` effort. The brief names the file paths, the data shape and its structure (a state machine over scattered booleans, a lookup table over branching, a typed model over repeated shape assumptions), and the success criteria. Delegating is required even for small changes, because the point is that someone other than the author reviews the diff.
 5. **Verify on the real surface** with `/jstack:prove`. Inconclusive is not a pass.

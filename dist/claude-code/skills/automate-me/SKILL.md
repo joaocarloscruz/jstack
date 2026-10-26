@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Turn how the user works into a skill agents follow. The output is one skill, `style`, in jstack's source at `src/skills/style/SKILL.md`. If you don't know where the jstack repo is, ask.
 
+jstack is installed for every project, so `style` applies everywhere. Capture habits that hold across projects. A rule that only fits one project belongs in that project's `CLAUDE.md` instead.
+
 ## 0. Check for an existing style skill
 
 If `src/skills/style/SKILL.md` exists, update it unless the user asked to start over. In update mode:
@@ -18,7 +20,7 @@ If `src/skills/style/SKILL.md` exists, update it unless the user asked to start 
 
 ## 1. Mine their history
 
-Transcripts live in `~/.claude/projects/<workspace>/`, where `<workspace>` is the project path with `:`, `/`, `\` and `.` replaced by `-`, and the newest `.jsonl` is the current session. Read only this workspace's, never other projects'.
+Transcripts live in `~/.claude/projects/<workspace>/`, where `<workspace>` is the project's absolute path with every character that isn't a letter or digit replaced by `-` (very long paths are shortened, so match the folder by prefix). Several sessions can share the folder, so open the newest few `.jsonl` files and pick the one whose first user message matches this session. Other projects' transcripts are private conversations, so ask the user which projects to mine. With no answer, mine only this workspace's.
 
 Split the last two to four weeks into three slices and spawn one subagent per slice on `haiku` at `low` effort. Each returns a short list of patterns with pointers to where it saw them. Signals to look for:
 
@@ -42,7 +44,7 @@ Sort the patterns into sections, using only the ones that apply: Response style,
 ## 4. Draft the skill
 
 - `name: style`.
-- `description`: say it holds the user's working preferences and applies to every task in this workspace. Avoid generic triggers like "write code".
+- `description`: say it holds the user's working preferences and applies to every task. Avoid generic triggers like "write code".
 - Write rules as instructions, with "the user", not their name.
 - Refer to other jstack skills by name instead of pasting their content.
 - Add a section only when the user has a specific, non-default rule there. "Communicate clearly" is not a rule. "Short paragraphs, tables to compare options" is.
@@ -53,7 +55,7 @@ Apply `/jstack:unslop` to every line. Show the draft and take feedback. Expect a
 
 ## 6. Land it
 
-Rebuild with `node build.mjs`. Commit on a branch and open a PR if the user wants one.
+Rebuild with `node build.mjs` and bump `version` in `jstack.json`. Commit on a branch and open a PR if the user wants one. The change reaches sessions only after the user updates the installed plugin (the README's Updating section).
 
 ## Guardrails
 

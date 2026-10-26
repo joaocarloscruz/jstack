@@ -12,7 +12,7 @@ Skip it when the session was trivial, off-topic, or fully covered by a skill tha
 
 ## 1. Find this session's transcript
 
-Transcripts live in {{harness:transcripts}}. Look only in this workspace's transcripts, never across other projects, because those are unrelated private conversations. If you can't find the file, write a tight digest of the session instead.
+Transcripts live in {{harness:transcripts}}. Look only at this workspace's transcripts, never other projects', because those are unrelated private conversations. If you can't find the file, write a tight digest of the session instead.
 
 ## 2. Spawn three reviewers in parallel
 
@@ -38,7 +38,7 @@ Move any Accepted item that a lint, script, hook or check would enforce more rel
 
 Show the full Accepted, Rejected and Backlog output, and wait for the user to approve rows. They may pick a subset or redirect a routing. Skill edits change every future session, so never apply them unasked.
 
-Edit jstack's source, never an installed copy. Skills live in `src/skills/<name>/` in the jstack repo. Rebuild with `node build.mjs` afterward. If you don't know where the jstack repo is, ask.
+Edit jstack's source, never an installed copy. Skills live in `src/skills/<name>/` in the jstack repo. Afterward, rebuild with `node build.mjs` and bump `version` in `jstack.json`. The edits reach sessions only after the user updates the installed plugin (the README's Updating section). If you don't know where the jstack repo is, ask.
 
 For each approved row:
 

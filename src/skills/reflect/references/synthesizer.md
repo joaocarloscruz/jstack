@@ -18,7 +18,7 @@ Test every finding against these criteria:
 - **Convergent.** Findings from two or more reviewers are stronger. A lone finding must clear a higher bar on the rest.
 - **Changes a decision.** A future session would do something different, not just read more text.
 - **Structural.** If a lint, script, hook or check could enforce it cheaply, it goes to Backlog. Skill text is for what mechanisms can't enforce.
-- **Skill was used.** Accept only findings routed to a skill the session used, or `tune description` for one that should have triggered. Reject the rest as `skill-not-used`.
+- **Skill was used.** A body edit or `tune description` must target a skill the session used, or one that should have triggered. Reject other routings to existing skills as `skill-not-used`. A `new skill` row is exempt, since no existing skill is involved, but it must pass the other criteria.
 - **Not already covered.** Read the target skill before accepting a body edit. If it already says this clearly, reject as `already-covered`: the problem was following it, not the text. If the guidance is there but buried or weak, accept it as a wording or placement fix, not an addition.
 
 Drop details that go stale, such as "the linter at commit bd91aa7 uses a chars/4 estimate". Keep patterns that last, such as "front-load trigger words in skill descriptions".
