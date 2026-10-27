@@ -2,7 +2,7 @@
 // runs, so text that only mentions a flag (a commit message, an echo, a heredoc) never counts as using it.
 
 export const REASONS = {
-  noVerify: "Skipping git hooks (--no-verify, or -n on commit) is blocked. Fix what the hook reports instead.",
+  noVerify: "Skipping git hooks (--no-verify, -n on commit, or -c core.hooksPath) is blocked. Fix what the hook reports instead.",
   forcePush: "Force-push is blocked. Use --force-with-lease on your own branch, or ask the user.",
   wipe: "Recursive delete of the filesystem root or the home directory is blocked.",
 };
@@ -47,16 +47,26 @@ export function parse(line, { powershell = false } = {}) {
       endWord();
       heredoc = start[2];
       i += start[0].length - 1;
-    } else if (c === "'" || c === '"') {
+    } else if (c === "'") {
       const close = line.indexOf(c, i + 1);
       const end = close === -1 ? line.length : close;
       word += line.slice(i + 1, end);
       inWord = true;
       i = end;
-    } else if (c === escape && i + 1 < line.length && line[i + 1] !== "\n") {
+    } else if (c === '"') {
+      // The escape still works inside double quotes, so \" (or `" in PowerShell) doesn't close them.
+      for (i++; i < line.length && line[i] !== '"'; i++) {
+        if (line[i] === escape && i + 1 < line.length) i++;
+        word += line[i];
+      }
+      inWord = true;
+    } else if (c === escape && /^\r?\n/.test(line.slice(i + 1, i + 3))) {
+      // A line continuation: the command goes on after the newline.
+      i += line[i + 1] === "\r" ? 2 : 1;
+    } else if (c === escape && i + 1 < line.length) {
       word += line[++i];
       inWord = true;
-    } else if (";|&\n()".includes(c)) {
+    } else if (";|&\n()`".includes(c)) {
       endCommand();
     } else if (/\s/.test(c)) {
       endWord();
@@ -71,9 +81,15 @@ export function parse(line, { powershell = false } = {}) {
 
 const WRAPPERS = new Set(["sudo", "command", "env", "time", "nohup", "xargs", "exec"]);
 const SHELLS = new Set(["bash", "sh", "zsh", "dash", "pwsh", "powershell", "cmd"]);
+const POWERSHELLS = new Set(["pwsh", "powershell"]);
 const DELETE_COMMANDS = new Set(["rm", "remove-item", "ri", "rmdir", "rd", "del"]);
 const GIT_OPTIONS_WITH_VALUE = new Set(["-C", "-c", "--git-dir", "--work-tree", "--namespace"]);
-const DANGEROUS_TARGET = /^(?:\/|~|\$HOME|\$\{HOME\}|\$env:USERPROFILE|%USERPROFILE%|[A-Za-z]:)[\\/]?\*?$/i;
+// Git Bash names a drive root /c and WSL names it /mnt/c.
+const DANGEROUS_TARGET = /^(?:\/(?:mnt\/)?[A-Za-z]?|~|\$HOME|\$\{HOME\}|\$env:USERPROFILE|%USERPROFILE%|[A-Za-z]:)[\\/]?\*?$/i;
+
+// The flag after which a shell runs the next word as a command. POSIX shells take it inside a
+// cluster (bash -lc), and it's case-sensitive there, so -NonInteractive must not count for PowerShell.
+const commandFlag = (shell) => (POWERSHELLS.has(shell) ? /^-(?:c|command)$/i : shell === "cmd" ? /^\/[ck]$/i : /^-[a-z]*c[a-z]*$/);
 
 const commandName = (word) => word.split(/[\\/]/).pop().toLowerCase().replace(/\.exe$/, "");
 
@@ -82,7 +98,11 @@ const flagsBefore = (word, takesValue) => word.slice(1).match(new RegExp(`^[^${t
 
 function checkGit(args) {
   let i = 0;
-  while (i < args.length && args[i].startsWith("-")) i += GIT_OPTIONS_WITH_VALUE.has(args[i]) ? 2 : 1;
+  while (i < args.length && args[i].startsWith("-")) {
+    // Pointing core.hooksPath elsewhere for one command skips the hooks just as --no-verify does.
+    if (args[i] === "-c" && /^core\.hookspath=/i.test(args[i + 1] ?? "")) return REASONS.noVerify;
+    i += GIT_OPTIONS_WITH_VALUE.has(args[i]) ? 2 : 1;
+  }
   const sub = args[i];
   const rest = args.slice(i + 1);
   const clusters = rest.filter((w) => /^-[A-Za-z]+$/.test(w));
@@ -119,8 +139,8 @@ export function check(line, { powershell = false, depth = 0 } = {}) {
     const args = raw.slice(start + 1);
 
     if (SHELLS.has(name)) {
-      const flag = args.findIndex((w) => /^(?:-c|-command|\/c)$/i.test(w));
-      const inner = { powershell: name === "pwsh" || name === "powershell", depth: depth + 1 };
+      const flag = args.findIndex((w) => commandFlag(name).test(w));
+      const inner = { powershell: POWERSHELLS.has(name), depth: depth + 1 };
       const nested = flag !== -1 && depth < 3 ? check(args.slice(flag + 1).join(" "), inner) : null;
       if (nested) return nested;
       continue;

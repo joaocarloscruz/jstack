@@ -4,6 +4,8 @@ A personal stack of agent skills, a reviewer agent and a safety hook, adapted fr
 
 ## Install
 
+You need Node.js 20 or newer on your `PATH`. The hook and the decision-log script run on it, and without it the hook fails on every shell command and blocks nothing.
+
 The repo root is a marketplace for both harnesses.
 
 **Claude Code**
@@ -66,11 +68,11 @@ Start with `lead`. It picks a playbook and calls the other skills as the work ne
 
 **Hook:** `guard-shell` runs before every Bash or PowerShell command. It parses the command into simple commands and words first, so text that only mentions a flag (a commit message, an `echo`, a heredoc) never counts. It blocks:
 
-- skipping git hooks: `--no-verify` on any git command, and `-n` on `git commit`
+- skipping git hooks: `--no-verify` on any git command, `-n` on `git commit`, and `git -c core.hooksPath=...`
 - force-pushing: `--force`, `-f` in any short-flag cluster, or a `+refspec`. `--force-with-lease` is allowed.
-- recursive deletes of `/`, `~`, `$HOME`, `$env:USERPROFILE` or a drive root, through `rm` or `Remove-Item`
+- recursive deletes of `/`, `~`, `$HOME`, `$env:USERPROFILE` or a drive root (`C:\`, or `/c` in Git Bash and `/mnt/c` in WSL), through `rm` or `Remove-Item`
 
-It also looks inside `bash -c`, `sh -c` and `pwsh -Command`. It's a guardrail against slips, not a sandbox. A determined command (a script file, an alias) can get past it.
+It follows line continuations and also looks inside `bash -c` (including clusters like `bash -lc`), `sh -c`, `pwsh -Command` and backtick substitutions. It's a guardrail against slips, not a sandbox. A determined command (a script file, an alias) can get past it.
 
 ## Layout
 

@@ -1,6 +1,6 @@
 {
   "name": "jstack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A personal, harness-agnostic stack of agent skills, subagents and hooks.",
   "author": {
     "name": "João Cruz"

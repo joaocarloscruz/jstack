@@ -15,6 +15,8 @@ const blocked = {
     "git merge --no-verify feature",
     "cd repo && git commit --no-verify -m x",
     'bash -c "git commit --no-verify -m x"',
+    "sh -ec 'git commit --no-verify -m x'",
+    "git -c core.hooksPath=/dev/null commit -m x",
   ],
   forcePush: [
     "git push --force origin main",
@@ -27,6 +29,11 @@ const blocked = {
     "git -C . push --force",
     "sudo git push --force",
     'pwsh -Command "git push --force origin main"',
+    'pwsh -NoProfile -NonInteractive -Command "git push --force origin main"',
+    "bash -lc 'git push --force'",
+    "git push \\\n  --force origin main",
+    "git push \\\r\n  --force origin main",
+    "echo `git push --force`",
   ],
   wipe: [
     "rm -rf /",
@@ -39,6 +46,9 @@ const blocked = {
     "rm --recursive --force /",
     "rm -rf -- /",
     "rm -r ~",
+    "rm -rf \\\n  /",
+    "rm -rf /c/",
+    "rm -rf /mnt/c",
   ],
 };
 
@@ -48,8 +58,14 @@ const blockedInPowerShell = [
   "Remove-Item -Path C:\\ -Recurse",
   "Remove-Item -Recurse $env:USERPROFILE",
   "git push --force origin main",
+  "git push `\n  --force origin main",
 ];
-const allowedInPowerShell = ["Remove-Item -Recurse -Force C:\\Users\\me\\build", "git commit -m 'mention --no-verify'"];
+const allowedInPowerShell = [
+  "Remove-Item -Recurse -Force C:\\Users\\me\\build",
+  "git commit -m 'mention --no-verify'",
+  'git commit -m "say `"hi`" before --no-verify"',
+  'git commit -m "say ""hi"" before --no-verify"',
+];
 
 for (const command of blockedInPowerShell) {
   test(`blocks in PowerShell: ${command}`, () => assert.notEqual(check(command, { powershell: true }), null));
@@ -61,6 +77,8 @@ for (const command of allowedInPowerShell) {
 const allowed = [
   "git commit -m x",
   'git commit -m "docs: explain why --no-verify is blocked"',
+  'git commit -m "say \\"hi\\" before --no-verify"',
+  "git commit -m 'it'\\''s not --no-verify'",
   "git commit -mn",
   "git push -u origin HEAD && gh pr create -f",
   "git push origin feature && rm -f tmp.txt",
@@ -72,7 +90,9 @@ const allowed = [
   "cat > notes.md <<'EOF'\nnever run git push --force or rm -rf /\nEOF",
   "rm -rf ./build",
   "rm -rf /tmp/x",
+  "rm -rf /c/Users/me/build",
   'rm -rf "$HOME/projects/old"',
+  "git config core.hooksPath .githooks",
   "rm ~/notes.txt",
 ];
 
@@ -91,6 +111,11 @@ test("parse splits commands and keeps quoted text as one word", () => {
     ["git", "commit", "-m", "a; b"],
     ["echo", "c d"],
   ]);
+});
+
+test("parse joins a line continuation into one command", () => {
+  assert.deepEqual(parse("git push \\\n  --force"), [["git", "push", "--force"]]);
+  assert.deepEqual(parse("git push `\n  --force", { powershell: true }), [["git", "push", "--force"]]);
 });
 
 test("parse skips heredoc bodies and resumes after them", () => {
