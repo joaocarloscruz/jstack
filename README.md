@@ -32,26 +32,29 @@ Claude Code caches the plugin by version, so a change reaches your sessions only
 | `how` | Explain how code works, with parallel explorers for big questions. |
 | `why` | Find why code is the way it is, from git and any connected tracker, docs or chat, with confidence labels. |
 | `unslop` | Remove AI writing patterns from prose. |
+| `models` | Show or change which model each agent below uses. You start it yourself with `/jstack:models`. |
 
 ## Agents and models
 
-The skills hand work to three agents. **Each agent's model is one line in its own file**, so that file is the only place you change it:
+The skills hand work to three agents. Each agent's model and effort are one line each in its own file:
 
-| Agent | Does | Model | File |
+| Agent | Does | Default model | File |
 |---|---|---|---|
 | `jstack:judge` | Design calls, reviews, explanations, synthesis, the hardest code | `opus`, medium effort | `agents/judge.md` |
 | `jstack:coder` | Code from `lead`'s brief | `sonnet`, high effort | `agents/coder.md` |
 | `jstack:fast` | Bulk reading, lookups, exploring code, mechanical edits | `haiku`, low effort | `agents/fast.md` |
 
-To change one, edit its `model:` line (`opus`, `sonnet`, `haiku`, `fable`, or `inherit` to follow the model you picked in the app) and its `effort:` line (`low`, `medium`, `high`, `xhigh`, `max`). Then update the plugin as above. The skills never pass a model, so the file always wins.
+To change them, run `/jstack:models`:
+
+- `/jstack:models` shows what each agent uses now.
+- `/jstack:models coder opus` sets one agent's model. Add an effort to set that too, as in `/jstack:models judge opus high`.
+- `/jstack:models all sonnet` sets all three.
+
+Models are `opus`, `sonnet`, `haiku`, `fable`, or `inherit` to follow the model you picked in the app. Efforts are `low`, `medium`, `high`, `xhigh` and `max`. Claude Code asks you to allow the edit, because it protects agent files.
+
+The change applies to new sessions and lasts until the next jstack update, which puts back the defaults above. To change a default for good, edit the line in `agents/` here and push a new version. The skills never pass a model, so the file always wins.
 
 The skill you run, such as `lead`, uses the model you picked in the app.
-
-To put every agent on one model for a while without touching jstack, add this to `~/.claude/settings.json` and remove it to go back:
-
-```json
-{ "env": { "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet", "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1" } }
-```
 
 ## Layout
 
