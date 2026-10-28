@@ -1,14 +1,6 @@
 {
   "name": "jstack",
-  "owner": {
-    "name": "João Cruz"
-  },
-  "description": "A personal, harness-agnostic stack of agent skills, subagents and hooks.",
-  "plugins": [
-    {
-      "name": "jstack",
-      "source": "./dist/claude-code",
-      "description": "A personal, harness-agnostic stack of agent skills, subagents and hooks."
-    }
-  ]
+  "owner": { "name": "João Cruz" },
+  "description": "A personal stack of Claude Code skills, agents and a safety hook for rigorous, verified work.",
+  "plugins": [{ "name": "jstack", "source": "./", "description": "A personal stack of Claude Code skills, agents and a safety hook for rigorous, verified work." }]
 }

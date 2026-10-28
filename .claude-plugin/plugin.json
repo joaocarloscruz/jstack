@@ -1,0 +1,8 @@
+{
+  "name": "jstack",
+  "version": "2.0.0",
+  "description": "A personal stack of Claude Code skills, agents and a safety hook for rigorous, verified work.",
+  "author": { "name": "João Cruz" },
+  "license": "MIT",
+  "keywords": ["workflow", "verification", "skills"]
+}

@@ -3,9 +3,5 @@
   "private": true,
   "type": "module",
   "engines": { "node": ">=20" },
-  "scripts": {
-    "build": "node build.mjs",
-    "check": "node build.mjs --check",
-    "test": "node --test"
-  }
+  "scripts": { "test": "node --test" }
 }
