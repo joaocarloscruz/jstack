@@ -1,6 +1,6 @@
 # jstack
 
-A personal stack of Claude Code skills, three helper agents and a safety hook, adapted from [pstack](https://github.com/cursor/plugins/tree/main/pstack). Start a task with `/jstack:lead`.
+A personal stack of Claude Code skills and three helper agents, adapted from [pstack](https://github.com/cursor/plugins/tree/main/pstack). Start a task with `/jstack:lead`.
 
 ## Install
 
@@ -12,7 +12,7 @@ claude plugin marketplace add joaocarloscruz/jstack
 claude plugin install jstack@jstack
 ```
 
-The safety hook needs Node.js 20 or newer on your `PATH`. Without Node it steps aside, and everything else works.
+Nothing else to install.
 
 ## Updating
 
@@ -53,16 +53,6 @@ To put every agent on one model for a while without touching jstack, add this to
 { "env": { "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet", "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1" } }
 ```
 
-## Safety hook
-
-`guard-shell` runs before every Bash or PowerShell command. It parses the command into simple commands and words first, so text that only mentions a flag (a commit message, an `echo`, a heredoc) never counts. It blocks:
-
-- skipping git hooks: `--no-verify` on any git command, `-n` on `git commit`, and `git -c core.hooksPath=...`
-- force-pushing: `--force`, `-f` in any short-flag cluster, or a `+refspec`. `--force-with-lease` is allowed.
-- recursive deletes of `/`, `~`, `$HOME`, `$env:USERPROFILE` or a drive root (`C:\`, or `/c` in Git Bash and `/mnt/c` in WSL), through `rm` or `Remove-Item`
-
-It follows line continuations and also looks inside `bash -c` (including clusters like `bash -lc`), `sh -c`, `pwsh -Command` and backtick substitutions. It's a guardrail against slips, not a sandbox. A determined command (a script file, an alias) can get past it.
-
 ## Layout
 
 | Path | What it holds |
@@ -70,8 +60,7 @@ It follows line continuations and also looks inside `bash -c` (including cluster
 | `.claude-plugin/` | The plugin manifest and the marketplace that serves this repo. |
 | `skills/<name>/` | One folder per skill. The frontmatter `name` must match the folder. |
 | `agents/` | The three agents, each with its model and effort. |
-| `hooks/` | `hooks.json` and the guard's script and rules. |
-| `test/` | Tests for the guard and for the plugin's references. |
+| `test/` | Tests for the plugin's references. |
 | `evals/` | `claude plugin eval` cases that run `lead` on small fixture tasks. |
 
 ## Tests and evals
@@ -80,7 +69,7 @@ It follows line continuations and also looks inside `bash -c` (including cluster
 npm test
 ```
 
-The tests check the guard's rules and that every skill, agent and file a skill names exists, and that each agent sets a valid model and effort. CI runs them on Ubuntu and Windows, so you don't need Node locally to edit a skill.
+The tests check that every skill, agent and file a skill names exists, and that each agent sets a valid model and effort. CI runs them on Ubuntu and Windows, so you don't need Node locally to edit a skill.
 
 ```bash
 claude plugin eval . --scaffold --trust-plugin --allow-tools Write Edit --runs 1

@@ -1,6 +1,6 @@
 {
   "name": "jstack",
   "owner": { "name": "João Cruz" },
-  "description": "A personal stack of Claude Code skills, agents and a safety hook for rigorous, verified work.",
-  "plugins": [{ "name": "jstack", "source": "./", "description": "A personal stack of Claude Code skills, agents and a safety hook for rigorous, verified work." }]
+  "description": "A personal stack of Claude Code skills and agents for rigorous, verified work.",
+  "plugins": [{ "name": "jstack", "source": "./", "description": "A personal stack of Claude Code skills and agents for rigorous, verified work." }]
 }

@@ -63,10 +63,7 @@ test("every principle a skill cites exists", () => {
   }
 });
 
-test("the marketplace serves the repo root and the hook covers both shells", () => {
+test("the marketplace serves the repo root", () => {
   const marketplace = JSON.parse(read(join(ROOT, ".claude-plugin", "marketplace.json")));
   assert.equal(marketplace.plugins[0].source, "./");
-  const hooks = JSON.parse(read(join(ROOT, "hooks", "hooks.json")));
-  assert.match(hooks.hooks.PreToolUse[0].matcher, /Bash/);
-  assert.match(hooks.hooks.PreToolUse[0].matcher, /PowerShell/);
 });
