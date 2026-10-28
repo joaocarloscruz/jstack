@@ -48,6 +48,7 @@ To change them, run `/jstack:models`:
 
 - `/jstack:models` shows what each agent uses now.
 - `/jstack:models coder opus` sets one agent's model. Add an effort to set that too, as in `/jstack:models judge opus high`.
+- `/jstack:models judge coder sonnet` sets both to the same model, and `/jstack:models judge opus high coder haiku` sets each its own.
 - `/jstack:models all sonnet` sets all three.
 
 Models are `opus`, `sonnet`, `haiku`, `fable`, or `inherit` to follow the model you picked in the app. Efforts are `low`, `medium`, `high`, `xhigh` and `max`. Claude Code asks you to allow the edit, because it protects agent files.
