@@ -1,7 +1,7 @@
 ---
 name: coder
 description: Writes code from a jstack lead's brief. Its model is set in this file, so don't pass one.
-model: sonnet
+model: claude-sonnet-5-5
 effort: high
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: fast
 description: Quick, mechanical work a jstack skill hands off - bulk reading, lookups, exploring code, or the same edit across many files, spelled out exactly. Its model is set in this file, so don't pass one.
-model: haiku
+model: claude-haiku-5-5
 effort: low
 ---
 

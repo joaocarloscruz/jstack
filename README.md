@@ -41,8 +41,10 @@ The skills hand work to three agents. Each agent's model and effort are one line
 | Agent | Does | Default model | File |
 |---|---|---|---|
 | `jstack:judge` | Design calls, reviews, explanations, synthesis, the hardest code | `opus`, medium effort | `agents/judge.md` |
-| `jstack:coder` | Code from `lead`'s brief | `sonnet`, high effort | `agents/coder.md` |
-| `jstack:fast` | Bulk reading, lookups, exploring code, the same edit across many files | `haiku`, low effort | `agents/fast.md` |
+| `jstack:coder` | Code from `lead`'s brief | `claude-sonnet-5-5`, high effort | `agents/coder.md` |
+| `jstack:fast` | Bulk reading, lookups, exploring code, the same edit across many files | `claude-haiku-5-5`, low effort | `agents/fast.md` |
+
+`coder` and `fast` name the full model IDs because older Claude Code versions run Sonnet 5 and Haiku 4.5 for the short names `sonnet` and `haiku`. The tests reject the short names and any 4.x model.
 
 To change them, run `/jstack:models`:
 
@@ -51,11 +53,11 @@ To change them, run `/jstack:models`:
 - `/jstack:models judge coder sonnet` sets both to the same model, and `/jstack:models judge opus high coder haiku` sets each its own.
 - `/jstack:models all sonnet` sets all three.
 
-Models are `opus`, `sonnet`, `haiku`, `fable`, or `inherit` to follow the model you picked in the app. Efforts are `low`, `medium`, `high`, `xhigh` and `max`. Claude Code asks you to allow the edit, because it protects agent files.
+Models are `opus`, `sonnet`, `haiku`, `fable`, or `inherit` to follow the model you picked in the app. The command writes `sonnet` and `haiku` as their 5.5 IDs. Efforts are `low`, `medium`, `high`, `xhigh` and `max`. Claude Code asks you to allow the edit, because it protects agent files.
 
 The change applies to new sessions and lasts until the next jstack update, which puts back the defaults above. To change a default for good, edit the line in `agents/` here and push a new version. The skills never pass a model, so the file always wins.
 
-The skill you run, such as `lead`, uses the model you picked in the app, and makes small edits itself. Handing a one-line edit to `fast` cost 16–23% more with Opus as the main model, because the brief and the check outweigh the edit. The same edit across 25 files cost 15–20% less through `fast`.
+The skill you run, such as `lead`, uses the model you picked in the app, and makes small edits itself. Handing a one-line edit to `fast` cost 16–23% more with Opus as the main model, because the brief and the check outweigh the edit. The same edit across 25 files cost 15–20% less through `fast`. Those runs had `fast` on Haiku 4.5. Haiku 5.5 costs a tenth as much, so bulk work through `fast` should save more, while a small edit still costs more because the brief and the check run on Opus.
 
 ## Layout
 

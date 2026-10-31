@@ -6,7 +6,9 @@ import { fileURLToPath } from "node:url";
 
 // Checks the references a hand-edited skill can break: there is no build step to catch them.
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
-const MODELS = ["opus", "sonnet", "haiku", "fable", "inherit"];
+// sonnet and haiku are left out: older Claude Code versions resolve them to 4.5-era models.
+const MODELS = ["opus", "fable", "inherit"];
+const MODEL_ID = /^claude-(opus|sonnet|haiku|fable)-([5-9]|\d{2,})(-\d+)?$/;
 const EFFORTS = ["low", "medium", "high", "xhigh", "max"];
 
 const walk = (dir) =>
@@ -32,7 +34,7 @@ test("every agent sets its model and effort on one line each", () => {
   for (const agent of agents) {
     const fields = frontmatter(read(join(ROOT, "agents", `${agent}.md`)));
     assert.equal(fields.name, agent);
-    assert.ok(MODELS.includes(fields.model), `${agent}: model "${fields.model}" is not one of ${MODELS.join(", ")}`);
+    assert.ok(MODELS.includes(fields.model) || MODEL_ID.test(fields.model), `${agent}: model "${fields.model}" must be ${MODELS.join(", ")} or a claude-* ID from version 5 on`);
     assert.ok(EFFORTS.includes(fields.effort), `${agent}: effort "${fields.effort}" is not one of ${EFFORTS.join(", ")}`);
   }
 });
