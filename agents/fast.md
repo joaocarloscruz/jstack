@@ -1,6 +1,6 @@
 ---
 name: fast
-description: Quick, mechanical work a jstack skill hands off - bulk reading, lookups, exploring code, or edits the brief spells out exactly. Its model is set in this file, so don't pass one.
+description: Quick, mechanical work a jstack skill hands off - bulk reading, lookups, exploring code, or the same edit across many files, spelled out exactly. Its model is set in this file, so don't pass one.
 model: haiku
 effort: low
 ---

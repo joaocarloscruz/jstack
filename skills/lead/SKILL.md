@@ -38,7 +38,7 @@ You lead the task. Subagents write most of the code. You own the plan, the revie
 ## Subagents
 
 - **Brief precisely.** File paths, the named data shape, success criteria and what not to touch. Point at files instead of pasting them.
-- **Pick the agent by job.** Code goes to the `jstack:coder` agent. Mechanical edits, bulk reading and read-only exploration go to `jstack:fast`; tell it not to edit when it explores. Design, review, prose and the hardest code (concurrency, subtle algorithms, cross-cutting changes) go to `jstack:judge`. Each agent sets its own model, so never pass one.
+- **Pick the agent by job.** Make small edits yourself, a few lines in a few files, because a handoff costs more than the edit. Other code goes to the `jstack:coder` agent. The same edit across many files (about five or more), bulk reading and read-only exploration go to `jstack:fast`; tell it not to edit when it explores. Design, review, prose and the hardest code (concurrency, subtle algorithms, cross-cutting changes) go to `jstack:judge`. Each agent sets its own model, so never pass one.
 - **Start fresh.** Give each new piece of work a new subagent with the full brief, every later instruction, and the previous agent's report. Reuse a subagent only for state that's costly to move, like uncommitted changes or a running server.
 - **Own the output.** Read the diff yourself and write your own summary. Never pass a subagent's claim along as verified.
 

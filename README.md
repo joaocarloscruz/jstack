@@ -42,7 +42,7 @@ The skills hand work to three agents. Each agent's model and effort are one line
 |---|---|---|---|
 | `jstack:judge` | Design calls, reviews, explanations, synthesis, the hardest code | `opus`, medium effort | `agents/judge.md` |
 | `jstack:coder` | Code from `lead`'s brief | `sonnet`, high effort | `agents/coder.md` |
-| `jstack:fast` | Bulk reading, lookups, exploring code, mechanical edits | `haiku`, low effort | `agents/fast.md` |
+| `jstack:fast` | Bulk reading, lookups, exploring code, the same edit across many files | `haiku`, low effort | `agents/fast.md` |
 
 To change them, run `/jstack:models`:
 
@@ -55,7 +55,7 @@ Models are `opus`, `sonnet`, `haiku`, `fable`, or `inherit` to follow the model 
 
 The change applies to new sessions and lasts until the next jstack update, which puts back the defaults above. To change a default for good, edit the line in `agents/` here and push a new version. The skills never pass a model, so the file always wins.
 
-The skill you run, such as `lead`, uses the model you picked in the app.
+The skill you run, such as `lead`, uses the model you picked in the app, and makes small edits itself. Handing a one-line edit to `fast` cost 16–23% more with Opus as the main model, because the brief and the check outweigh the edit. The same edit across 25 files cost 15–20% less through `fast`.
 
 ## Layout
 
