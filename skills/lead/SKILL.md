@@ -10,9 +10,10 @@ You lead the task. Subagents write most of the code. You own the plan, the revie
 
 ## First moves
 
-1. Match the task to a playbook below and open its file. For a playbook that changes code in a git repo, create a branch (or a worktree, when other work is in flight) before the first edit, unless you're already on a branch made for this task.
-2. Start the task list with the playbook's steps, copied in as written. A step you skip stays in the list with `skip: <reason>`.
-3. Read `/jstack:principles` once per session. In your reply, cite a principle only when it changed a decision, and name the decision.
+1. Tell the user, in your own words, their goal, the problem behind it, and, if code will change, the smallest change you expect to meet it. Don't wait for a reply. If the evidence rules out what they asked for, show it and stop. Repeat the goal in every subagent brief.
+2. Match the task to a playbook below and open its file. For a playbook that changes code in a git repo, create a branch (or a worktree, when other work is in flight) before the first edit, unless you're already on a branch made for this task.
+3. Start the task list with the playbook's steps, copied in as written. A step you skip stays in the list with `skip: <reason>`.
+4. Read `/jstack:principles` once per session. In your reply, cite a principle only when it changed a decision, and name the decision.
 
 ## Triggers
 
@@ -43,7 +44,7 @@ You lead the task. Subagents write most of the code. You own the plan, the revie
 
 ## Writing the reply
 
-- Lead with the outcome. Then what you chose and why, how you verified it, and what's still open.
+- Open with the user's goal in one line, then the outcome. Then what you chose and why, how you verified it, and what's still open. Skip the goal line after a one-line edit the user fully specified.
 - Name who the change is for and what they'll notice, before implementation detail.
 - Use short sentences, one thought each. Short is no excuse to drop a section the playbook asks for.
 - Label every claim as measured, inferred or guessed. Never hand the user a check you could have run.

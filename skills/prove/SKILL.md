@@ -13,7 +13,7 @@ Done means observed, not inferred. Check the real thing before you report.
 2. **Pick the surface the user sees.** Run the CLI, call the endpoint, open the page, load the file. A unit test proves a branch, not the claim. A wrong surface is not a pass.
 3. **Run it and keep the output.** Prefer a command or script someone can rerun over a one-off look. Paste its output verbatim into your reply.
 4. **Show the before.** For a fix, show the same check failing without the change, or say why you can't.
-5. **Get a second look on nontrivial work.** Hand the diff and your evidence to a `jstack:judge` agent, with `references/review-brief.md` as its brief. Give it file paths, not pasted context.
+5. **Get a second look on nontrivial work.** Hand the diff and your evidence to a `jstack:judge` agent, with `references/review-brief.md` as its brief. Give it file paths, not pasted context. Rerun each finding's command yourself and act only on the ones that reproduce.
 6. **Report with labels.** Mark each claim as measured, inferred or guessed. Never hand the user a check you could have run yourself.
 
 ## Not a pass

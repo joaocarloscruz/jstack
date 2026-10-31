@@ -12,7 +12,7 @@ The last step of every playbook that changes code. If the repo has no remote, or
 
 **Description.** A one-minute briefing for a reviewer who has the diff. Use `##` headings in this order, and drop any section with nothing to say:
 
-- `## Why`: the problem and the approach, in one to three sentences.
+- `## Why`: the user's goal, the problem and the approach, in one to three sentences.
 - `## What changed`: one to three bullets. Name both sides of a rename.
 - `## Scope`: always present. What it covers and what it deliberately leaves out.
 - `## Tradeoffs`: only alternatives a reviewer would otherwise ask about.

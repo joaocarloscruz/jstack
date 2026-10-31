@@ -53,7 +53,7 @@ Each principle starts with when it applies. Cite one in a reply only when it cha
 
 **Test behavior, not implementation.** Writing, changing or keeping a test. Imagine two edits. Break the behavior: the test must fail. Restructure the internals without changing results: the test must still pass. Keep tests that do both. Derive expected values from the requirement, not from running the code.
 
-**Explain the number.** Before trusting or reporting a measurement (speedup, latency, eval score). Name what limits it, from a profile or counters, not a guess. List what else it could be measuring (errors, cached or skipped work, noise) and rule each out. Keep the run count and spread with the number.
+**Explain the number.** Before measuring, and before trusting or reporting a measurement (speedup, latency, eval score). First write down which result would change your decision, and how much the number moves between runs. If that spread is bigger than the effect, stop, because the number can't decide anything. Name what limits it, from a profile or counters, not a guess. List what else it could be measuring (errors, cached or skipped work, noise) and rule each out. Keep the run count and spread with the number.
 
 ## Delegation
 
