@@ -16,7 +16,7 @@ Nothing else to install.
 
 ## Updating
 
-Claude Code caches the plugin by version, so a change reaches your sessions only after a version bump:
+Claude Code caches the plugin by version, so pushes reach your sessions only after a version bump. Let several changes land first, then bump the patch number (`2.5.0` to `2.5.1`):
 
 1. Bump `version` in `.claude-plugin/plugin.json`, then commit and push.
 2. Run `claude plugin marketplace update jstack`, then `claude plugin update jstack@jstack`.
@@ -57,7 +57,14 @@ Models are `opus`, `sonnet`, `haiku`, `fable`, or `inherit` to follow the model 
 
 The change applies to new sessions and lasts until the next jstack update, which puts back the defaults above. To change a default for good, edit the line in `agents/` here and push a new version. The skills never pass a model, so the file always wins.
 
-The skill you run, such as `lead`, uses the model you picked in the app, and makes small edits itself. Handing a one-line edit to `fast` cost 16–23% more with Opus as the main model, because the brief and the check outweigh the edit. The same edit across 25 files cost 15–20% less through `fast`. Those runs had `fast` on Haiku 4.5. Haiku 5.5 costs a tenth as much, so bulk work through `fast` should save more, while a small edit still costs more because the brief and the check run on Opus.
+The skill you run, such as `lead`, uses the model you picked in the app. It makes a change itself only when the change is shorter than a brief would be: a few lines it already knows, or one plain find-and-replace with `sed`. Every other edit it can spell out goes to `fast`, along with bulk reading and exploration. With Opus 5.5 leading and Haiku 5.5 as `fast`, measured with the app's Claude Code:
+
+| Edit | Done by the main agent | Handed to `fast` |
+|---|---|---|
+| One line | $0.19, 7–10s | $0.21, 17–21s |
+| 36 calls of 12 shapes in one file, under `lead` | $0.56–0.76 (5 runs) | $0.47–0.51 (2 runs) |
+
+A plain swap across 25 files cost $0.37–0.41 under `lead`, done with one `sed`. Every run was correct.
 
 ## Layout
 

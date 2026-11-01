@@ -21,6 +21,7 @@ You lead the task. Subagents write most of the code. You own the plan, the revie
 - **Any code.** Name the data shape first, per Model the domain in `/jstack:principles`.
 - **Code that crosses a function boundary, or a shape that's hard to undo.** Sketch the types and signatures, and how callers will use them, before writing the body.
 - **Unfamiliar code.** Run `/jstack:how` for how it works and `/jstack:why` for why it is this way.
+- **About to edit.** If the change takes more than a few lines and isn't one plain find-and-replace (the same text swap everywhere), hand it to `jstack:fast` with the rule written once. A change with several cases isn't a plain find-and-replace, even if a clever `sed` could do it.
 - **Before saying done.** Run `/jstack:prove`.
 - **Prose a person will read** (your reply, a PR, a commit message, docs). Apply `/jstack:unslop`.
 - **A jstack skill misbehaves mid-task.** Work around it openly, say so in the reply, and fix the skill in its own change afterward. Never mix skill edits into feature work.
@@ -37,10 +38,14 @@ You lead the task. Subagents write most of the code. You own the plan, the revie
 
 ## Subagents
 
-- **Brief precisely.** File paths, the named data shape, success criteria and what not to touch. Point at files instead of pasting them.
-- **Pick the agent by job.** Make small edits yourself, a few lines in a few files, because a handoff costs more than the edit. Other code goes to the `jstack:coder` agent. The same edit across many files (about five or more), bulk reading and read-only exploration go to `jstack:fast`; tell it not to edit when it explores. Design, review, prose and the hardest code (concurrency, subtle algorithms, cross-cutting changes) go to `jstack:judge`. Each agent sets its own model, so never pass one.
+- **Pick who does it.** A handoff costs a brief, an extra turn and a check, so hand off only work that would cost you more than that. Each agent sets its own model, so never pass one.
+  - **Yourself:** a change that's shorter to make than to brief: a few lines you already know, or one plain find-and-replace with `sed`. Check it with `git diff --stat` before you report.
+  - **`jstack:fast`:** bulk reading and read-only exploration (tell it not to edit), and every other edit you can spell out exactly. Write the rule once, covering every case, and hand it over instead of editing or scripting it yourself.
+  - **`jstack:coder`:** code you still have to work out, such as a feature, a fix you haven't pinned down, or changes that differ from file to file.
+  - **`jstack:judge`:** design, review, prose, and the hardest code (concurrency, subtle algorithms, cross-cutting changes).
+- **Brief precisely, and briefly.** File paths or a glob, the exact change or the named data shape, what shows it's done, and what not to touch. Point at files instead of pasting them. Ask `jstack:fast` to report only the files it changed.
 - **Start fresh.** Give each new piece of work a new subagent with the full brief, every later instruction, and the previous agent's report. Reuse a subagent only for state that's costly to move, like uncommitted changes or a running server.
-- **Own the output.** Read the diff yourself and write your own summary. Never pass a subagent's claim along as verified.
+- **Own the output.** Read the diff of code changes yourself. Confirm a mechanical change with one command, such as a grep or `git diff --stat`, instead of rereading each file. Write your own summary, and never pass a subagent's claim along as verified.
 
 ## Writing the reply
 
