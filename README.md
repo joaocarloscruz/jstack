@@ -73,22 +73,6 @@ A plain swap across 25 files cost $0.37–0.41 under `lead`, done with one `sed`
 | `.claude-plugin/` | The plugin manifest and the marketplace that serves this repo. |
 | `skills/<name>/` | One folder per skill. The frontmatter `name` must match the folder. |
 | `agents/` | The three agents, each with its model and effort. |
-| `test/` | Tests for the plugin's references. |
-| `evals/` | `claude plugin eval` cases that run `lead` on small fixture tasks. |
-
-## Tests and evals
-
-```bash
-npm test
-```
-
-The tests check that every skill, agent and file a skill names exists, and that each agent sets a valid model and effort. CI runs them on Ubuntu and Windows, so you don't need Node locally to edit a skill.
-
-```bash
-claude plugin eval . --scaffold --trust-plugin --allow-tools Write Edit --runs 1
-```
-
-The evals run real sessions on your account. Use them before a change you're unsure of, to compare its results and cost against the current version. On native Windows the runs get no shell, so the cases grade the files the agent leaves behind.
 
 ## Codex
 
