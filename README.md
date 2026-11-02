@@ -29,7 +29,7 @@ Claude Code caches the plugin by version, so pushes reach your sessions only aft
 | `lead` | The entry point. Matches the task to a playbook (Investigation, Bug fix, Feature, Refactoring, Prototype, Opening a PR), hands code to the agents below, and verifies before reporting. You start it yourself with `/jstack:lead`. |
 | `principles` | The engineering principles the playbooks cite, in one file. |
 | `prove` | Verify against the real thing before saying done, with a second look from `jstack:judge` on nontrivial work. |
-| `how` | Explain how code works, with parallel explorers for big questions. |
+| `how` | Explain how code works, with parallel explorers for big questions. Ask it to "draw the architecture of this app" for a full map with diagrams. |
 | `why` | Find why code is the way it is, from git and any connected tracker, docs or chat, with confidence labels. |
 | `unslop` | Remove AI writing patterns from prose. |
 | `models` | Show or change which model each agent below uses. You start it yourself with `/jstack:models`. |
@@ -42,9 +42,9 @@ The skills hand work to three agents. Each agent's model and effort are one line
 |---|---|---|---|
 | `jstack:judge` | Design calls, reviews, explanations, synthesis, the hardest code | `opus`, medium effort | `agents/judge.md` |
 | `jstack:coder` | Code from `lead`'s brief | `claude-sonnet-5-5`, high effort | `agents/coder.md` |
-| `jstack:fast` | Bulk reading, lookups, exploring code, the same edit across many files | `claude-haiku-5-5`, low effort | `agents/fast.md` |
+| `jstack:fast` | Bulk reading, lookups, exploring code, edits `lead` spells out exactly | `claude-haiku-5-5`, low effort | `agents/fast.md` |
 
-`coder` and `fast` name the full model IDs because older Claude Code versions run Sonnet 5 and Haiku 4.5 for the short names `sonnet` and `haiku`. The tests reject the short names and any 4.x model.
+`coder` and `fast` name the full model IDs because older Claude Code versions run Sonnet 5 and Haiku 4.5 for the short names `sonnet` and `haiku`.
 
 To change them, run `/jstack:models`:
 
